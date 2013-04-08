@@ -1,5 +1,5 @@
 import urllib
-import urllib2
+
 try:
     import json
 except ImportError:
@@ -87,18 +87,19 @@ class Http(object):
             if optional_params[key]:
                 data[key] = optional_params[key]
 
-        data = urllib.urlencode(data, 1)
-        req = urllib2.Request(url, data)
+        data = urllib.parse.urlencode(data, 1)
+        data = data.encode('utf8')
+        req = urllib.request.Request(url, data)
         try:
-            f = urllib2.urlopen(req)
+            f = urllib.request.urlopen(req)
             output = f.read()
-        except IOError, e:
+        except IOError as e:
             try:
                 output = e.read()
             except AttributeError:
                 raise exceptions.SGServiceException(e)
 
-        output = json.loads(output)
+        output = json.loads(output.decode('utf8'))
 
         if output['message'] == 'error':
             raise exceptions.SGServiceException(output['errors'])

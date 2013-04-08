@@ -1,5 +1,5 @@
-import rfc822
-from header import SmtpApiHeader
+import email.utils as email_utils
+from . header import SmtpApiHeader
 
 
 class Message(object):
@@ -41,7 +41,7 @@ class Message(object):
         self.headers = {}
         self.attachments = []
         self.header = SmtpApiHeader()
-        self.date = rfc822.formatdate()
+        self.date = email_utils.formatdate()
 
     def set_replyto(self, replyto):
         """
@@ -74,7 +74,7 @@ class Message(object):
         if not recipients:
             raise ValueError('No recipients')
 
-        if isinstance(recipients, (str, unicode)):
+        if isinstance(recipients, str):
             self.to += [recipients]
             if names:
                 self.to_name += [names]
@@ -125,13 +125,13 @@ class Message(object):
         Returns:
             self
         """
-        if isinstance(recipients, (str, unicode)):
+        if isinstance(recipients, str):
             self.cc += [recipients]
         else:
             self.cc += recipients
 
         self.header.add_cc(recipients)
-        
+
         return self
 
     def add_bcc(self, recipients):
@@ -144,13 +144,13 @@ class Message(object):
         Returns:
             self
         """
-        if isinstance(recipients, (str, unicode)):
+        if isinstance(recipients, str):
             self.bcc += [recipients]
         else:
             self.bcc += recipients
 
         self.header.add_bcc(recipients)
-        
+
         return self
 
     def add_attachment(self, name, file, cid=None):
@@ -179,7 +179,7 @@ class Message(object):
         Returns:
             self
         """
-        if isinstance(category, (str, unicode)):
+        if isinstance(category, str):
             self.header.add_category(category)
         else:
             for cat in category:

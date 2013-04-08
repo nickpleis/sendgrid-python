@@ -36,7 +36,7 @@ class Sendgrid(object):
         """
         Return web transport
         """
-        from transport import web
+        from . transport import web
         return web.Http(self.username, self.password, ssl=self.secure, user=self.user)
 
 
@@ -46,5 +46,5 @@ class Sendgrid(object):
         """
         Return smtp transport
         """
-        from transport import smtp
+        from . transport import smtp
         return smtp.Smtp(self.username, self.password, tls=self.secure)
